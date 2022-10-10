@@ -53,3 +53,80 @@ Evaluation metrics digunakan untuk mengukur performa atau kualitas model machine
 Pada model machine learning regresi terdapat berbagai macam metrik yang digunakan, seperti MAE, MAPE, dan R-squared. MAE merupakan rata-rata nilai absolut dari error dan MAPE merupakan rata-rata persentase error. MAE dan MAPE merupakan metrik yang tidak sensitif terhadap outlier. Semakin rendah nilai MAE dan MAPE maka semakin akurat model dalam prediksi harga properti residential. Selain itu R-squared merupakan koefisien determinasi yang mengindikasi besarnya kombinasi variabel independen mempengaruhi variabel dependen. Nilai R-squared berkisar diantara 0 dan 1, dimana semakin tinggi nilai R-square maka semakin baik model regresi. R-squared hanya bisa digunakan pada model linear.
 
 Pada model machine learning clustering, metrik yang dapat digunakan adalah Silhouette Score. Metrik digunakan untuk menentukan jumlah clustering yang optimal. Jumlah cluster yang ideal dengan metrik silhouette dilihat dari nilai koefisien dengan rentang -1 sampai 1. Nilai 1 menunjukkan nilai terbaik dimana data sangat compact pada clusternya, nilai 0 menunjukkan cluster saling tumpang tindih, dan nilai terburuk adalah -1. Silhouette score digunakan karena memiliki pendekatan yang lebih akurat dan *reliable* pada penentuan jumlah cluster.
+<br>
+
+### Conclusion
+
+#### Price Prediction
+
+* **Meminimalisir Error**<br>  
+  
+Dari hasil di atas disimpulkan bahwa prediksi dengan model XGBoost yang sudah dibuat akan menghasilkan nilai error dengan rata-rata error +- USD 65784.21 atau setara dengan 11.36% harga. 
+  
+Dengan hal tersebut, perusahaan diharapkan bisa menentukan harga sesuai dengan fitur masing-masing properti dengan error minimal dan mengurangi potensi overpriced atau underpriced. Dengan contoh kasus **underpriced** yang ditemukan sebelumnya pada tahap data understanding (Harga underpriced pada kolom unqualified jika dibandingkan dengan kolom qualified yang memiliki fitur yang hampir identik) dan dibandingkan dengan hasil pemodelan, maka perhitungan jumlah kerugian yang bisa dihindari sebagai berikut. 
+
+* Sebelum pemodelan => Harga Qualified - Harga Unqualified = USD 846000 - USD 339500 = USD 506500  
+* Setelah pemodelan => MAE = USD 65784.21
+
+Maka kerugian yang bisa dihindari adalah => USD 506500 - USD 65784.21 = USD 440715.79
+<br>
+
+* **Memotong Budget Survey**<br>
+  
+Selain itu, perusahaan juga mampu memotong pengeluaran untuk pemakaian jasa surveyor properti. Harga survey properti untuk [cicilan](https://www.angi.com/articles/how-much-does-land-survey-cost.htm) berkisar antara US$500 per surveynya. Maka dari itu, harga tersebut akan digunakan sebagai perhitungan.
+
+Pengeluaran biaya untuk jasa surveyor properti dengan asumsi memiliki 1 orang surveyor dengan ketentuan 40jam kerja per minggu:  
+
+Harga rata-rata 1x survey = US$500  
+Waktu rata-rata 1x survey = 3 jam + 1 jam untuk laporan, perjalanan, dan keperluan lain   
+Survey/minggu = 40jam/minggu : 4 jam = 10x survey  
+Survey/tahun = 10 x 52 minggu = 520 survey  
+Biaya jasa surveyor per tahun = 520 x 500 = US$260.000
+
+Dengan bantuan Machine Learning, bila diasumsikan jasa surveyor tidak digunakan sama sekali, maka perusahaan bisa menghemat sebesar US$260.000/surveyor setiap tahunnya.
+<br>
+
+* **Fitur-fitur penting dan limitasi**<br>
+  
+Features dari dataset yang paling berpengaruh terhadap harga properti adalah GRADE, diikuti dengan kolom GBA dan SALEYEAR. Kolom GRADE memiliki pengaruh yang paling signifikan terhadap PRICE yaitu semakin tinggi GRADE makan harga cenderung semakin tinggi juga, ditunjukkan dengan median tiap GRADE yang meningkat sesuai order. Hal yang sama terdapat pada GBA dan SALEYEAR. Semakin luas nilai GBA maka harga cenderung naik, dan semakin terkini tahun SALEYEAR maka harga cenderung naik.
+
+Model hanya bisa digunakan pada data properti Residential. Selain itu diketahui, model memiliki error yang lebih kecil dengan harga di bawah USD 3Jt-4Jt. Di atas harga tersebut model masih mengalami error yang cukup signifikan yang disebabkan karena sedikitnya data dengan harga tersebut.
+<br>
+
+#### Property Segmentation
+
+* **Hasil Clustering**<br>  
+  
+Dari hasil pemodelan clustering didapatkan model terbaik dengan menggunakan Agglomerative Ward dengan silhouette score 0.601 pada jumlah cluster 3. Pada dataset diketahui bahwa terdapat 3 segmentasi properti yaitu, **Lower**, **Middle**, dan **Upper** dengan `PRICE` sebagai pembeda segmentasi. Dimana terdapat kecenderungan beberapa fitur pada masing-masing segmentasi sebagai berikut:
+1. **LOWER** : tidak memiliki FIREPLACE, Luas Bangunan berada di rentang **1100-1650** sqft, kondisi properti **average**.
+1. **MIDDLE** : telah melakukan proses remodeling, memiliki Half Bathroom, Luas Bangunan berada di rentang **1400-1950** sqft, kondisi properti **good**.
+1. **UPPER** : terdapat FIREPLACE, telah melakukan proses remodeling, memiliki Half Bathroom, Luas Bangunan lebih dari **1800** sqft, kondisi properti **good** & **very good**, berlokasi di kuadran ***Northwest*** (Ward 2 & 3).
+<br>
+
+* **Business Approach**<br>
+  
+Dengan adanya clustering di atas, maka perusahaan mampu menurunkan leadtime hingga 67%. Angka itu didapatkan dari mengurangi 2 kemungkinan dari total 3 kemungkinan yang ada dalam menawarkan rumah kepada customer. Sehingga dengan spare waktu 67% tersebut dapat meningkatkan efisiensi kerja Departemen Marketing, seperti efisiensi workload dan efisiensi manpower.
+<br>
+
+* **Limitasi**<br>  
+  
+Model sangat sensitif terhadap data outlier, sehingga data dengan outlier akan dihapus. Selain itu karena model memiliki sifat kompleks, model membutuhkan waktu dan *space device* yang mumpuni untuk menangani **jumlah data yang terlalu besar**.
+<br>
+
+### Recommendation
+
+Model:
+- Membuat pemodelan untuk properti Condominium untuk menjangkau prediksi harga seluruh properti Washington DC.
+- Memastikan bahwa tidak terjadi kesalahan-kesalahan input data seperti tahun, nomor ataupun fitur lainnya pada saat pengumpulan dataset.
+- Menambahkan fitur lain seperti jarak ke sekolah atau pusat perbelanjaan untuk menjelaskan apakah properti tersebut berada di lokasi strategis atau tidak.
+- Menambah jumlah data, khususnya pada range harga di atas US$2 juta untuk membuat akurasi model prediksi yang lebih baik.
+- Melakukan improvement pada parameter tuning model price prediction dengan tuning di atas sebagai benchmark.
+- Melakukan pemodelan price prediction ulang setelah dilakukan feature importance sehingga mendapatkan model yang lebih baik dengan fitur-fitur lebih penting yang berpengaruh pada prediksi harga properti untuk mengurangi kompleksitas model dan efisiensi waktu pemodelan.
+- Mencoba menggunakan pemodelan DBScan pada Properti Segmentation dimana model lebih robust terhadap data outlier dan bisa digunakan pada dataset yang lebih besar.
+
+Business:
+- Menggunakan model machine learning price prediction yang telah dibuat sebagai solusi untuk menentukan harga properti dengan error minimum serta menghindari kasus overprice dan underprice.
+- Memberikan rekomendasi berdasarkan tren bulan yang dapat membantu Departemen Marketing untuk menyarankan waktu beli terbaik kepada customer.
+- Menyediakan informasi segmentasi properti untuk Departemen Marketing yang disesuaikan dengan target market, berdasarkan karakteristik properti yang telah dijabarkan pada cluster *Lower*, *Middle*, dan *Upper*.
+- Menyarankan Department Marketing untuk membuat iklan berdasarkan kelompok rumah, **Lower** -> Type 1, **Middle** -> Type 2, **Upper** -> Type 3 pada space/platform iklan dengan deskripsi fitur dan harga sesuai segmentasi untuk lebih menarik perhatian customer.
+- Membuat sebuah aplikasi dengan model yang telah dibuat untuk mempermudah prediksi dan segmentasi dan menunjang perusahaan Residential Real Estate Company.
