@@ -130,3 +130,8 @@ Business:
 - Menyediakan informasi segmentasi properti untuk Departemen Marketing yang disesuaikan dengan target market, berdasarkan karakteristik properti yang telah dijabarkan pada cluster *Lower*, *Middle*, dan *Upper*.
 - Menyarankan Department Marketing untuk membuat iklan berdasarkan kelompok rumah, **Lower** -> Type 1, **Middle** -> Type 2, **Upper** -> Type 3 pada space/platform iklan dengan deskripsi fitur dan harga sesuai segmentasi untuk lebih menarik perhatian customer.
 - Membuat sebuah aplikasi dengan model yang telah dibuat untuk mempermudah prediksi dan segmentasi dan menunjang perusahaan Residential Real Estate Company.
+
+### Dashboard
+
+[(Dashboard Tableau)](https://public.tableau.com/app/profile/tamara.coglitore/viz/pricetrend/Dashboard2?publish=yes)
+![alt text](https://github.com/PurwadhikaDev/OmegaTeam_JC_DS_LS_02_FinalProject/blob/main/DC%20RESIDENTIAL%20PROPERTIES%20-%20DASHBOARD.png)
